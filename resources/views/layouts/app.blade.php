@@ -5,49 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @vite(['resources/css/app.css','resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', config('app.name', 'Ferretería Hernández'))</title>
+    <title>@yield('title', config('app.name', 'Librería Zapote'))</title>
 
-    {{-- Fuentes locales --}}
     <style>
-        /* VARIABLES DE COLOR Y TIPOGRAFÍA */
+        @font-face{
+            font-family:'Bebas Neue';
+            src:url('{{ asset('fonts/bebasneue/BebasNeue-Regular.ttf') }}') format('truetype');
+            font-weight:400;
+            font-style:normal;
+            font-display:swap;
+        }
+
+        @font-face{
+            font-family:'Archivo';
+            src:url('{{ asset('fonts/archivo/Archivo-Regular.ttf') }}') format('truetype');
+            font-weight:400;
+            font-style:normal;
+            font-display:swap;
+        }
+
         :root{
-            --orange-900:#8a3b00;
-            --orange-700:#ff6a00;
-            --orange-600:#ff7a1a;
-            --orange-500:#ff8c00;
-            --orange-300:#ffb347;
-            --dark:#0f0f10;
-            --muted:#6b7280;
-            --light:#f8f9fb;
+            --purple-900:#4b1c71;
+            --purple-700:#7f4ca5;
+            --purple-500:#b57edc;
+            --purple-300:#dbb6ee;
+            --purple-100:#fff0ff;
+
+            --dark:#0b0b10;
+            --dark-soft:#171320;
+            --dark-purple:#241533;
+
+            --text-light:#f5ecfb;
+            --text-soft:#d9cbe6;
+            --muted:#8c7a9e;
             --card:#ffffff;
+            --border:#eadcf2;
 
             --font-display:'Bebas Neue', sans-serif;
             --font-body:'Archivo', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
-        /* ========= NAVBAR GENERAL ========= */
-        .navbar-orange{
-            background:linear-gradient(90deg, var(--dark), #1a1a1c);
+        html, body{
+            font-family:var(--font-body);
+            background:linear-gradient(180deg, #fbf7fd 0%, #f8f2fb 100%);
+            color:#111;
         }
+
+        .bebas{
+            font-family:var(--font-display);
+            letter-spacing:.5px;
+        }
+
+        /* ========= NAVBAR GENERAL ========= */
+        .navbar-purple{
+            background:linear-gradient(90deg, var(--dark) 0%, var(--dark-soft) 45%, var(--purple-900) 100%);
+            box-shadow:0 8px 24px rgba(0,0,0,.18);
+        }
+
         .navbar-brand{
             font-family:var(--font-display);
             letter-spacing:1px;
             font-weight:700;
             color:#fff !important;
-        }
-        .nav-link{
-            color:#eaeaea!important;
-            opacity:.9;
-            font-weight:500;
-        }
-        .nav-link:hover{
-            opacity:1;
+            font-size:1.4rem;
         }
 
-        /* Ícono hamburguesa */
+        .nav-link{
+            color:var(--text-light)!important;
+            opacity:.92;
+            font-weight:500;
+            transition:.2s ease;
+        }
+
+        .nav-link:hover{
+            opacity:1;
+            color:#fff !important;
+        }
+
         .navbar-toggler{
             border-color:rgba(255,255,255,.35);
         }
+
         .navbar-toggler-icon{
             filter:invert(1);
         }
@@ -55,28 +93,37 @@
         /* ===================== BUSCADOR ===================== */
         .nav-search .search-wrap{
             background:#fff;
-            border-radius:16px;
-            padding:.6rem;
-            box-shadow:0 10px 28px rgba(0,0,0,.08);
+            border-radius:18px;
+            padding:.5rem;
+            box-shadow:0 10px 28px rgba(0,0,0,.10);
             max-width:720px;
             margin-inline:auto;
+            border:1px solid rgba(181,126,220,.18);
         }
+
         .nav-search input{
             border:0;
             font-family:var(--font-body);
-        }
-        .nav-search .btn{
-            height:40px;
-            border-radius:12px;
-            font-weight:600;
-            background:var(--orange-700);
-            border:0;
-        }
-        .nav-search .btn:hover{
-            background:var(--orange-600);
+            color:#2d1f3a;
         }
 
-        /* En pantallas móviles ocupa el 100% */
+        .nav-search input::placeholder{
+            color:#8b7b99;
+        }
+
+        .nav-search .btn{
+            height:42px;
+            border-radius:12px;
+            font-weight:700;
+            background:linear-gradient(135deg, var(--purple-700), var(--purple-900));
+            border:0;
+            box-shadow:0 8px 18px rgba(75,28,113,.18);
+        }
+
+        .nav-search .btn:hover{
+            background:linear-gradient(135deg, var(--purple-900), var(--purple-700));
+        }
+
         @media (max-width: 991.98px){
             .nav-search .search-wrap{
                 max-width:100%;
@@ -89,17 +136,20 @@
             align-items:center;
             justify-content:center;
             gap:.5rem;
-            padding:.4rem .6rem;
-            border:1px solid rgba(255,255,255,.35);
-            border-radius:12px;
+            padding:.45rem .65rem;
+            border:1px solid rgba(255,255,255,.28);
+            border-radius:13px;
             color:#fff;
-            background:transparent;
+            background:rgba(255,255,255,.03);
             position:relative;
+            transition:.2s ease;
         }
+
         .cart-btn:hover{
-            background:rgba(255,255,255,.08);
+            background:rgba(255,255,255,.10);
             color:#fff;
         }
+
         .badge-cart{
             position:absolute;
             top:-6px;
@@ -107,97 +157,81 @@
             font-size:.70rem;
             border-radius:999px;
             padding:.15rem .38rem;
-            background:var(--orange-600);
+            background:var(--purple-700);
             color:#fff;
+            box-shadow:0 4px 10px rgba(0,0,0,.18);
         }
 
-        /* Ajuste preventivo para que los dropdown no se corten */
         .navbar{
             z-index:1035;
         }
+
         .navbar .container,
         .navbar .row,
         .navbar [class*="col-"]{
             overflow:visible;
         }
+
         .dropdown-menu{
             z-index:1080;
+            border:none;
+            border-radius:14px;
+            box-shadow:0 18px 40px rgba(75,28,113,.14);
+            overflow:hidden;
         }
 
-        /* QUITAR BORDES DEL INPUT DENTRO DEL BUSCADOR */
+        .dropdown-item:active{
+            background:var(--purple-700);
+        }
+
         .search-wrap input:focus{
             box-shadow:none !important;
             outline:0 !important;
         }
 
-        /* Alineación óptima del contenido */
         .navbar .row{
             --bs-gutter-x:1rem;
         }
-    </style>
-
-    <style>
-        @font-face{
-            font-family:'Bebas Neue';
-            src:url('{{ asset('fonts/bebasneue/BebasNeue-Regular.ttf') }}') format('truetype');
-            font-weight:400; font-style:normal; font-display:swap;
-        }
-        @font-face{
-            font-family:'Archivo';
-            src:url('{{ asset('fonts/archivo/Archivo-Regular.ttf') }}') format('truetype');
-            font-weight:400; font-style:normal; font-display:swap;
-        }
-
-        /* ===== Paleta (del landing) ===== */
-        :root{
-            --orange-900:#8a3b00;
-            --orange-700:#ff6a00;
-            --orange-600:#ff7a1a;
-            --orange-500:#ff8c00;
-            --orange-300:#ffb347;
-            --dark:#0f0f10;
-            --muted:#6b7280;
-            --light:#f8f9fb;
-            --card:#ffffff;
-
-            --font-display:'Bebas Neue', sans-serif;
-            --font-body:'Archivo', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        html, body{ font-family:var(--font-body); background:#fff; color:#111; }
-        .bebas{ font-family:var(--font-display); letter-spacing:.5px; }
-
-        /* ===== NAV estilo landing ===== */
-        .navbar-orange{ background:linear-gradient(90deg, var(--dark), #1a1a1c); }
-        .navbar-orange .navbar-brand,
-        .navbar-orange .nav-link{ color:#eaeaea!important; }
-        .navbar-orange .nav-link{ opacity:.9; }
-        .navbar-orange .nav-link:hover{ opacity:1; }
-        .navbar-brand{ font-family:var(--font-display); font-weight:700; letter-spacing:.6px; }
 
         /* Frase central */
-        .slogan-1{ color:var(--orange-700); font-weight:800; text-transform:uppercase; }
-        .slogan-2{ color:#cfd2d6; }
-
-        /* Botón Inicio con la paleta */
-        .btn-home{
-            color:#fff; border:0;
-            background:linear-gradient(90deg,var(--orange-600),var(--orange-300));
-            padding:.45rem .8rem; border-radius:.6rem;
+        .slogan-1{
+            color:var(--purple-500);
+            font-weight:800;
+            text-transform:uppercase;
         }
-        .btn-home:hover{ filter:brightness(.95); }
 
-        /* Ajustes menores */
-        .navbar-toggler{ border-color:rgba(255,255,255,.35) }
-        .navbar-toggler-icon{ filter:invert(1); }
-        /* Asegura que el dropdown pueda salir del navbar y quede por encima */
-        .navbar{ z-index: 1040; }
+        .slogan-2{
+            color:var(--text-soft);
+        }
+
+        /* Botón Inicio */
+        .btn-home{
+            color:#fff;
+            border:0;
+            background:linear-gradient(135deg, var(--purple-700), var(--purple-500));
+            padding:.45rem .8rem;
+            border-radius:.6rem;
+        }
+
+        .btn-home:hover{
+            filter:brightness(.96);
+            color:#fff;
+        }
+
+        .navbar{
+            z-index:1040;
+        }
+
         .navbar .container,
         .navbar .container-fluid,
         .navbar .row,
-        .navbar [class*="col-"]{ overflow: visible; }   /* clave para que no lo recorten */
-        .dropdown-menu{ z-index: 1080; }                 /* sobre la hero */
+        .navbar [class*="col-"]{
+            overflow:visible;
+        }
 
+        .dropdown-menu{
+            z-index:1080;
+        }
     </style>
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -206,23 +240,21 @@
 <body>
 <div id="app">
 
-    {{-- NAV --}}
-    {{-- ================= NAVBAR UNIFICADO ================= --}}
-    <nav class="navbar navbar-expand-lg navbar-orange sticky-top">
+    {{-- NAVBAR UNIFICADO --}}
+    <nav class="navbar navbar-expand-lg navbar-purple sticky-top">
         <div class="container">
             <div class="row align-items-center w-100 g-2">
 
                 {{-- Izquierda: Marca --}}
                 <div class="col-6 col-lg-3 order-1">
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        FERRETERÍA HERNÁNDEZ
+                        LIBRERÍA ZAPOTE
                     </a>
                 </div>
 
                 {{-- Móvil: Carrito + Hamburguesa --}}
                 <div class="col-6 d-lg-none order-2 d-flex justify-content-end align-items-center gap-2">
 
-                    {{-- Botón carrito --}}
                     <button class="position-relative cart-btn"
                             data-bs-toggle="modal"
                             data-bs-target="#cartModal">
@@ -230,7 +262,6 @@
                         <span class="badge-cart">{{ $cartCount ?? 0 }}</span>
                     </button>
 
-                    {{-- Botón menú --}}
                     <button class="navbar-toggler" type="button"
                             data-bs-toggle="collapse" data-bs-target="#navMain">
                         <span class="navbar-toggler-icon"></span>
@@ -241,7 +272,7 @@
                 <div class="col-12 col-lg-6 order-4 order-lg-2 nav-search">
                     <form class="search-wrap d-flex align-items-center gap-2" method="GET" action="{{ route('shop.catalogo') }}">
                         <input type="search" name="q" class="form-control"
-                               placeholder="Buscar productos (ej. taladro, brocas, pintura)...">
+                               placeholder="Buscar libros (ej. Los Hornos de Hitler, It, Frankenstein)...">
                         <button class="btn btn-primary px-3" type="submit">Buscar</button>
                     </form>
                 </div>
@@ -256,7 +287,6 @@
                                 <a class="nav-link" href="#contacto">Contacto</a>
                             </li>
 
-                            {{-- Si es cliente, mostrar catálogo --}}
                             @auth
                                 @role('cliente')
                                 <li class="nav-item">
@@ -265,7 +295,6 @@
                                 @endrole
                             @endauth
 
-                            {{-- Carrito desktop --}}
                             <li class="nav-item d-none d-lg-inline">
                                 <button class="position-relative cart-btn" data-bs-toggle="modal" data-bs-target="#cartModal">
                                     <i class="fa-solid fa-cart-shopping"></i>
@@ -273,8 +302,6 @@
                                 </button>
                             </li>
 
-                            {{-- Login / Usuario --}}
-                            {{-- Login / Usuario --}}
                             @guest
                                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Ingresar</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registrarse</a></li>
@@ -285,14 +312,11 @@
                                     </a>
 
                                     <ul class="dropdown-menu dropdown-menu-end shadow">
-
-                                        {{-- Mostrar Dashboard solo si NO es cliente --}}
                                         @unless(auth()->user()->hasRole('cliente'))
                                             <li><a class="dropdown-item" href="{{ route('home') }}">Dashboard</a></li>
                                             <li><hr></li>
                                         @endunless
 
-                                        {{-- Logout --}}
                                         <li>
                                             <a class="dropdown-item" href="{{ route('logout') }}"
                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -307,7 +331,6 @@
                                 </li>
                             @endguest
 
-
                         </ul>
 
                     </div>
@@ -317,9 +340,7 @@
         </div>
     </nav>
 
-    {{-- Asegura que el modal esté disponible --}}
     @include('shop.partials.modal-carrito')
-
 
     <main class="py">
         @yield('content')

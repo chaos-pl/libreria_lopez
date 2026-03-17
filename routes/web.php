@@ -131,3 +131,22 @@ Route::middleware(['auth', 'cliente'])->group(function() {
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('shop.checkout.process');
 
 });
+
+
+
+
+Route::get('admin/generos/create', fn() => view('admin.generos.create'))->name('admin.generos.create');
+
+Route::get('admin/subgeneros/create', fn() => view('admin.subgeneros.create', ['generos' => collect()]))->name('admin.subgeneros.create');
+
+Route::get('admin/libros/create', fn() => view('admin.libros.create', ['clasificaciones' => collect(), 'generos' => collect()]))->name('admin.libros.create');
+
+Route::get('admin/ubicaciones/create', fn() => view('admin.ubicaciones.create', ['generos' => collect()]))->name('admin.ubicaciones.create');
+
+Route::get('admin/asigna-subgenero/create', fn() => view('admin.generos.create', ['libros' => collect(), 'subgeneros' => collect()]))->name('admin.generos.create');
+
+Route::get('admin/mermas/create', fn() => view('admin.mermas.create', ['lotes' => collect(), 'usuarios' => collect()]))->name('admin.mermas.create');
+Route::get('admin/asigna-subgeneros/create', fn() => view('admin.asigna_subgeneros.create', [
+    'libros' => collect(),
+    'subgeneros' => collect()
+]))->name('admin.asigna_subgeneros.create');
